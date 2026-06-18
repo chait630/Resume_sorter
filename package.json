@@ -1,0 +1,15 @@
+{
+  "name": "resume-sorter",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "npm start --prefix server",
+    "client": "npm start --prefix client",
+    "dev": "npm run server & npm run client",
+    "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server",
+    "render-build": "npm install && npm install --prefix client && npm run build --prefix client && npm install --prefix server"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
