@@ -1,4 +1,5 @@
 const path = require('path');
+// Load .env in development; on Render env vars are injected directly
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const mongoose = require('mongoose');
@@ -13,9 +14,20 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
+// Hard fallback so JWT never crashes — Render dashboard should override this
 if (!process.env.JWT_SECRET) {
-  console.warn('⚠️ WARNING: JWT_SECRET is not defined in .env');
+  console.warn('⚠️  WARNING: JWT_SECRET not in environment — using fallback. Set it in Render dashboard!');
+  process.env.JWT_SECRET = 'resumesort_secret_2024';
 }
+
+// Log env var status at startup for easy Render log debugging
+console.log('🔑 ENV CHECK:', {
+  JWT_SECRET:  process.env.JWT_SECRET  ? '✅ set' : '❌ MISSING',
+  MONGO_URI:   process.env.MONGO_URI   ? '✅ set' : '❌ MISSING',
+  EMAIL_USER:  process.env.EMAIL_USER  ? '✅ set' : '❌ MISSING',
+  EMAIL_PASS:  process.env.EMAIL_PASS  ? '✅ set' : '❌ MISSING',
+  NODE_ENV:    process.env.NODE_ENV    || 'not set',
+});
 
 app.use(cors());
 app.use(express.json());

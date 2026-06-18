@@ -9,10 +9,10 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        sync: false
+        value: mongodb+srv://chaithanya3021_db_user:chaithanya3021@cluster0.irvxemb.mongodb.net/Resume_sorter?retryWrites=true&w=majority
       - key: JWT_SECRET
-        sync: false
+        value: resumesort_secret_2024
       - key: EMAIL_USER
-        sync: false
+        value: chaithanya3021@gmail.com
       - key: EMAIL_PASS
-        sync: false
+        value: tzrrmhzyveliqjcj

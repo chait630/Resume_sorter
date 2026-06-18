@@ -27,10 +27,23 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     console.log('Sending OTP email...');
-    await sendOtpEmail(email, otp, name);
-    console.log(`OTP sent to ${email}: ${otp}`);
+    let emailDelivered = true;
+    try {
+      await sendOtpEmail(email, otp, name);
+      console.log(`✅ OTP email sent to ${email}`);
+    } catch (emailErr) {
+      emailDelivered = false;
+      // Log OTP to console so it is visible in Render logs as fallback
+      console.error(`❌ Email send failed: ${emailErr.message}`);
+      console.warn(`📋 FALLBACK OTP for ${email} → ${otp} (check Render logs)`);
+    }
 
-    res.status(201).json({ success: true, message: 'OTP sent to your email.' });
+    res.status(201).json({
+      success: true,
+      message: emailDelivered
+        ? 'OTP sent to your email.'
+        : 'Account created but email delivery failed. Check server logs for your OTP.',
+    });
   } catch (err) {
     console.error('REGISTER ERROR:', err);
     res.status(500).json({ message: err.message, stack: err.stack });
